@@ -16,7 +16,8 @@ H. H. Mao, T. Shin and G. Cottrell, "DeepJ: Style-Specific Music Generation," 20
 * Repo [[link](https://github.com/calclavia/DeepJ)]
 
 ## Related Works
-TBD
+J. D.D., “Generating polyphonic music using tied parallel networks,” Correia J., Ciesielski V., Liapis A. (eds) Computational Intelligence in Music, Sound, Art and Design. EvoMUSART 2017., 2017. [Online]. Available: https://link.springer.com/chapter/10.1007/978-3-319-55750-2_9 978-3-319-55750-2 9  
+* Paper [[link]](https://link.springer.com/chapter/10.1007/978-3-319-55750-2_9)]  
 
 
 ## Dataset
