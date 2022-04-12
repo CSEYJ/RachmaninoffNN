@@ -12,6 +12,7 @@ RachmaninoffNN
 ## Introduction
 
 ## Related Work
+One of the most notable related works that our target paper compares against is "Generating Polyphonic Music Using Tied Parallel Networks" by Daniel D. Johnson [[2][related_work_1]]. This work is unique in the sense that it can compose music of multiple genres, whereas the previous works mainly focus on a music composition task of a specific genre. The author uses Bi-Axial LSTM and Tied-Parallel LSTM-NADE for the music generation and prediction tasks for the polyphonic music, where the models can take different melodies concurrently at the time-level granularity (joint probability distribution). As noted by both papers [[1][target], [2][related_work_1]], this related work achieved high prediction accuracy and generated the music of multiple genres but fails to ensure a strong consistency in the single-genre music (i.e., each output is of a particular genre). Our target paper aims to leverage this shortcoming.
 
 ## Data
 
@@ -31,6 +32,7 @@ As noted from the target paper [[1][target]], the essential metric of evaluating
 
 ### Final Report and Posting
 Final report and posting preparations are crucial parts of the final project to demonstrate the bottleneck of our implementation through evaluations and description. We plan to hold weekly or daily meetings to ensure that everyone participates in summarizing and documenting the project and share each member's interpretation and understanding of the framework on their roles.
+
 ### References
 [1] H. H. Mao, T. Shin and G. Cottrell, "DeepJ: Style-Specific Music Generation," 2018 IEEE 12th International Conference on Semantic Computing (ICSC), 2018, pp. 377-382, doi: 10.1109/ICSC.2018.00077.  
 * Paper [[link][target]]  
