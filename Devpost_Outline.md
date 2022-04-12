@@ -1,4 +1,4 @@
-# RachmaninoffNN: Style-specific music generation with biaxial LSTM
+# RachmaninoffNN: Style-Specific Music Generation with Biaxial LSTM
 
 ## Team Members
 * Xin Lian (xlian1)
