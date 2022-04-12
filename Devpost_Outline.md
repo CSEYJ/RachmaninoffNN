@@ -1,7 +1,4 @@
-# Devpost Outline
-
-## Project Name
-RachmaninoffNN
+# RachmaninoffNN: Style-specific music generation with biaxial LSTM
 
 ## Team Members
 * Xin Lian (xlian1)
@@ -14,7 +11,7 @@ RachmaninoffNN
 Deep learning has shown its superiority in solving generative tasks in the domains of natural language processing and computer vision, creating artificial articles and pictures that are realistic and comparable to the works of human. While deep learning has also been incorporated in the field of audio recent years for automatic music generation, generating realistic and aesthetic music pieces remains challenging. Most existing neural network music generation algorithms specialize to creating new music in a particular music genre, but few algorithms possess a tunable ability which gives users the freedom to choose their desired musical style including music genre, composer’s style, mood, etc. In the paper by [Mao et al](https://arxiv.org/abs/1801.00887), the authors aim to create a model that is capable of composing music given a specific or a mixture of musical styles, and they believe that such model can be helpful in customizing generated music for people in the music and film industries. They develop upon the previously introduced genre-agnostic algorithm, Biaxial LSTM, and incorporate new methods to learn music dynamics. In our project, we will be implementing the deep learning model introduced in the paper, DeepJ, utilizing a different dataset with mixed-style piano repertoire from the 17th to early 20th century.  
 
 ## Related Work
-One of the most notable related works that our target paper compares against is "Generating Polyphonic Music Using Tied Parallel Networks" by Daniel D. Johnson [[2][related_work_1]]. This work is unique in the sense that it can compose music of multiple genres, whereas the previous works mainly focus on a music composition task of a specific genre. The author uses Bi-Axial LSTM and Tied-Parallel LSTM-NADE for the music generation and prediction tasks for the polyphonic music, where the models can take different melodies concurrently at the time-level granularity (joint probability distribution). As noted by both papers [[1][target], [2][related_work_1]], this related work achieved high prediction accuracy and generated the music of multiple genres but fails to ensure a strong consistency in the single-genre music (i.e., each output is of a particular genre). Our target paper aims to leverage this shortcoming. The link for DeepJ codes can be found at the reference section.
+One of the most notable related works that our target paper compares against is "Generating Polyphonic Music Using Tied Parallel Networks" by Daniel D. Johnson [[2][related_work_1]]. This work is unique in the sense that it can compose music of multiple genres, whereas the previous works mainly focus on a music composition task of a specific genre. The author uses Bi-Axial LSTM and Tied-Parallel LSTM-NADE for the music generation and prediction tasks for the polyphonic music, where the models can take different melodies concurrently at the time-level granularity (joint probability distribution). As noted by both papers [[1][target], [2][related_work_1]], this related work achieved high prediction accuracy and generated the music of multiple genres but fails to ensure a strong consistency in the single-genre music (i.e., each output is of a particular genre). Our target paper aims to leverage this shortcoming. The link for DeepJ code can be found at the reference section.
 
 ## Data
 
