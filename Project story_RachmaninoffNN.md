@@ -5,6 +5,8 @@ Yongjeong Kim (ykim235), Xin Lian (xlian1), Yezhi Pan (ypan34), Yanyu Tao (ytao5
 
 ## Introduction
 
+Deep learning has shown its superiority in solving generative tasks in the domains of natural language processing and computer vision, creating artificial articles and pictures that are realistic and comparable to the works of human. While deep learning has also been incorporated in the field of audio recent years for automatic music generation, generating realistic and aesthetic music pieces remains challenging. Most existing neural network music generation algorithms specialize to creating new music in a particular music genre, but few algorithms possess a tunable ability which gives users the freedom to choose their desired musical style including music genre, composer’s style, mood, etc. In the paper by [Mao et al](https://arxiv.org/abs/1801.00887), the authors aim to create a model that is capable of composing music given a specific or a mixture of musical styles, and they believe that such model can be helpful in customizing generated music for people in the music and film industries. They develop upon the previously introduced genre-agnostic algorithm, Biaxial LSTM, and incorporate new methods to learn music dynamics. In our project, we will be implementing the deep learning model introduced in the paper, DeepJ, utilizing a different dataset with mixed-style piano repertoire from the 17th to early 20th century.  
+
 ## Related Work
 
 ## Data
@@ -29,6 +31,12 @@ Training was performed using stochastic gradient descent with the Nesterov Adam 
 
 
 ## Metrics
+
+We plan to train our model on the MAESTRO dataset consisting musics of three specific styles including classical, baroque, and romantic. Following the original manuscript, we will also truncate the pitch range in the MIDI files to reduce the input dimensionality. Hyperparameters including number of units for the two axes in the model, number of filters, and dimensions of the embedding space will be decided upon tuning, the most optimal ones will be selected. The model will be updated using stochastic gradient descent with the Adam optimizer. Detailed training steps can be found in the [Methodology section](#methodology). 
+
+Given that music evaluation can be personal, the authors launch subjective experiments to evaluate the generated musics from two aspects, quality and style. For quality analysis, general users are asked to choose a better one from pairs of music generation of DeepJ and music generation of the original Biaxial model. For style analysis, users with music background are divided into two groups and are asked to make manual classification of style given the music generations of DeepJ and real music pieces respectively. A hypothesis test is conducted based on their responses to check the difference in identifiability of musical style between the two groups. We will also conduct subjective user study in evaluating the performance of our model, but due to the time limitation of the project, we may not find as many users as in the original paper, and we will calculate objective metrics such as perplexity score as supplementary to examine our model. 
+
+In this project, our base goal is to successfully reimplement the DeepJ model and train the model on the MAESTRO dataset. We target at generating discernable, realistic music that are comparable to the work of human, and our strech goal is to generate aesthetic music with identifiable styles to some extent. 
 
 ## Ethics
 Since our project is not concerned with lyrics or any natural language related elements in the music generation process, the major ethical complication involved is related to intellectual property and copyright issues. One broader societal issue relevant to our chosen problem space is: how should we distribute credits when using AI or DL models to engage in creative process? To what extent is it ethical to make AL or DL models to "learn" from other people's work? There is no agreements or legal terms that specify whether it's appropriate to generate music from copyrighted works, so we need to consider this from ethical perspectives. As a result, we will only train the model on properly licenced data and will not attempt to generate music from any web-scraped or unlicenced MIDI files.
