@@ -25,8 +25,9 @@ This model is Biaxial LSTMs for the time-based and node-based modules. This mode
 
 Here is the target model architecture for original paper[[1](#references)] uses: 1):
 <div align="center">
-<img src="" height="300px">
+<img src="https://github.com/CSEYJ/RachmaninoffNN/blob/main/architecture%20schematic%20diagram.gif" height="300px">
 </div>
+
 A 1-dimensional convolution layer is applied to note input to extract note features. The outputs are then concatenated with contextual inputs and incorporated information of style through adding non-linear representation of style before fed into Time-Axis Module. The outputs from this LSTM layer also needs to be concatenated with chosen notes from results, do component-wise sum with style and then be fed into next LSTM layer: Note-Axis Module. Finally, we feed the outputs of this layer into sigmoid probability layer to get prediction results.
 
 While reimplementing with a different framework sounds like a simple task, understanding the existing models without detailed code documentation can be challenging. Also, simply modifying the dataset and converting the Tensorflow-version to the PyTorch version does not necessarily make our model better. For instance, we will need to ensure that our implementation scales well with our GPU accelerator environment and the size of the dataset (e.g., we are given an option to choose the number of accelerators). Furthermore, creating a developing environment that works for every team member's local environment is crucial if we decide to implement the initial code locally for the testing and then deploy them to the cloud instance.
