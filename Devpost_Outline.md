@@ -47,20 +47,20 @@ The significant stakeholders of music generation deep learning models are compos
 
 We understand that the implementation works cannot be evenly divided among members since it is difficult to predict the time/effort required for each project segment. Instead, we plan to create git branches for each member where we may hold weekly/bi-weekly meetings to synchronize the process and undergo code reviews. Then, we will merge with the main branch on ongoing basis to ensure the quality of working codes. 
 
-Attempted distribution of work is as follows:
-- Data preprocessing (data cleaning, style assignment, compatibility modification, etc.) - Yezhi
-- Model architecture - Yongjeong
-- Test and main (calculate complexity, call model, etc.) - Yanyu
-- Visualisation and other utility functions - Xin
+The attempted distribution of work is as follows:
+- Data preprocessing (data cleaning, style assignment, compatibility modification, etc.) - Yezhi Pan
+- Model architecture - Yongjeong Kim
+- Test and main (calculate complexity, call model, etc.) - Yanyu Tao
+- Visualization and other utility functions - Xin Lian
   
 
 ### Survey 
 As noted from the target paper [[1](#references)], the essential metric of evaluating the DeepJ framework is surveying a diverse group of people, including but not limited to one with a Deep Learning background and another group without expertise.
 
-Attempted distribution of work is as follows:
-- Create survey templates and links - Yezhi, Yanyu
+The attempted distribution of work is as follows:
+- Create survey templates and links - Yezhi Pan and Yanyu Tao
 - Distribute surveys - all
-- Analyze survey results and generating relevant charts - Yongjeong, Xin
+- Analyze survey results and generate relevant charts - Yongjeong Kim and Xin Lian
 
 ### Final Report and Posting
 Final report and posting preparations are crucial parts of the final project to demonstrate the bottleneck of our implementation through evaluations and description. We plan to hold weekly or daily meetings to ensure that everyone participates in summarizing and documenting the project and share each member's interpretation and understanding of the framework on their roles.
