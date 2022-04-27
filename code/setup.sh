@@ -1,6 +1,7 @@
-sudo apt-get update && sudo apt-get upgrade
-sudo apt install python
-sudo apt install python3-pip
-sudo apt install nvidia-cuda-toolkit
+sudo apt-get -y update && sudo apt-get -y upgrade
+sudo apt -y install unzip
+sudo apt -y install python
+sudo apt -y install python3-pip
+sudo apt -y install nvidia-cuda-toolkit
 pip install cuda-python
 pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
