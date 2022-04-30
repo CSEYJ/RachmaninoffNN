@@ -11,7 +11,4 @@ Reimplementing the paper ([DeepJ](https://github.com/calclavia/DeepJ)) with PyTo
 * Yongjeong Kim
 
 ## Requirements
-- Python3-MIDI: 
-  - `pip install git+https://github.com/vishnubob/python-midi@feature/python3`
-- Other packages:
-  - `pip install -r requirements.txt`
+- Please install the dependency: `sh ./setup.sh`
