@@ -11,5 +11,7 @@ Reimplementing the paper ([DeepJ](https://github.com/calclavia/DeepJ)) with PyTo
 * Yongjeong Kim
 
 ## Requirements
-- `Python3-midi`:
-  -  Clone the repo
+- `Python3-midi`: 
+  - `pip install git+https://github.com/vishnubob/python-midi@feature/python3`
+- Other packages:
+  - `pip install -r requirements.txt`
