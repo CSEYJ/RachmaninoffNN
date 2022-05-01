@@ -5,3 +5,4 @@ joblib
 tqdm
 h5py
 cuda-python
+torchmetrics
