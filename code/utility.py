@@ -28,7 +28,6 @@ SOFTWARE.
 import midi
 import numpy as np
 import os
-import tensorflow as tf
 import math
 import random
 from joblib import Parallel, delayed
@@ -195,3 +194,15 @@ def one_hot(i, nb_classes):
 
 def compute_beat(beat, notes_in_bar):
     return one_hot(beat % notes_in_bar, notes_in_bar)
+
+def build_or_load(allow_load=True):
+    from model import build_models
+    models = build_models()
+    models[0].summary()
+    if allow_load:
+        try:
+            models[0].load_weights(MODEL_FILE)
+            print('Loaded model from file.')
+        except:
+            print('Unable to load model from file.')
+    return models
