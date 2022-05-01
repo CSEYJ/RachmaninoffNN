@@ -6,3 +6,6 @@ tqdm
 h5py
 cuda-python
 torchmetrics
+testresources
+torch==1.11
+torchvision==0.12.0
