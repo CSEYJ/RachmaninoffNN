@@ -4,6 +4,8 @@ The following is the implementation provided from the Pytorch Github issues by t
 
 Source: https://github.com/pytorch/pytorch/issues/1927
 '''
+import torch.nn as nn
+
 class TimeDistributed(nn.Module):
     def __init__(self, module):
         super(TimeDistributed, self).__init__()
