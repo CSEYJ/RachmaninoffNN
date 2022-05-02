@@ -76,8 +76,8 @@ def train(models):
 
     for i in range(1000):
         print('epoch #' + str(i + 1) + '/' + str(1000))
-    	index = 0
-    	while (index + BATCH_SIZE) < len(train_labels):
+        index = 0
+        while (index + BATCH_SIZE) < len(train_labels):
             print('Batch #' + str(i + 1))
             current_note_data = torch.as_tensor(note_data[index:index + BATCH_SIZE], dtype=torch.float64, device=torch.device('cuda'))
             current_note_target = torch.as_tensor(note_target[index:index + BATCH_SIZE], dtype=torch.float64, device=torch.device('cuda'))
