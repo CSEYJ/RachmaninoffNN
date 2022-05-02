@@ -22,25 +22,50 @@ def load_all(styles, batch_size, time_steps):
     styles = [y for x in styles for y in x]
 
     for style_id, style in enumerate(styles):
-        print('loading data: ' + str(((style_id + 1) / len(styles)) * 100) + '%')
+        print('loading style data: ' + str(style_id + 1)  + '/'+ str(len(styles)))
         style_hot = one_hot(style_id, NUM_STYLES)
         # Parallel process all files into a list of music sequences
         
         if os.path.exists(style):
             all_files = [os.path.join(style, f) for f in os.listdir(style)]
-            seqs = Parallel(n_jobs=multiprocessing.cpu_count(), backend='threading')(delayed(load_midi)(f) for f in all_files)
+            n_jobs = multiprocessing.cpu_count()
+            if n_jobs > 1:
+                print('utilizing 2 threads ...')
+                seqs = Parallel(n_jobs=2, backend='threading')(delayed(load_midi)(f) for f in all_files)
+                nseqs = len(seqs)
+                index = 1
+                for seq in seqs:
+                    print('processing seq#' + str(index) + '/' + str(nseqs))
+                    if len(seq) >= time_steps:
+                        # Clamp MIDI to note range
+                        seq = clamp_midi(seq)
+                        # Create training data and labels
+                        train_data, label_data = stagger(seq, time_steps)
+                        note_data += train_data
+                        note_target += label_data
+                        beats = [compute_beat(i, NOTES_PER_BAR) for i in range(len(seq))]
+                        beat_data += stagger(beats, time_steps)[0]
+                        style_data += stagger([style_hot for i in range(len(seq))], time_steps)[0]
+                    index += 1
+            else:
+                print('utilizing 1 thread ...')
+                seqs = Parallel(n_jobs=1, backend='threading')(delayed(load_midi)(f) for f in all_files)
+                nseqs = len(seqs)
+                index = 1
+                for seq in seqs:
+                    print('processing seq#' + str(index) + '/' + str(nseqs))
+                    if len(seq) >= time_steps:
+                        # Clamp MIDI to note range
+                        seq = clamp_midi(seq)
+                        # Create training data and labels
+                        train_data, label_data = stagger(seq, time_steps)
+                        note_data += train_data
+                        note_target += label_data
+                        beats = [compute_beat(i, NOTES_PER_BAR) for i in range(len(seq))]
+                        beat_data += stagger(beats, time_steps)[0]
+                        style_data += stagger([style_hot for i in range(len(seq))], time_steps)[0]
+                    index += 1
 
-            for seq in seqs:
-                if len(seq) >= time_steps:
-                    # Clamp MIDI to note range
-                    seq = clamp_midi(seq)
-                    # Create training data and labels
-                    train_data, label_data = stagger(seq, time_steps)
-                    note_data += train_data
-                    note_target += label_data
-                    beats = [compute_beat(i, NOTES_PER_BAR) for i in range(len(seq))]
-                    beat_data += stagger(beats, time_steps)[0]
-                    style_data += stagger([style_hot for i in range(len(seq))], time_steps)[0]
         else:
             print(str(style) + ' does not exist.')
 
@@ -83,9 +108,10 @@ def get_preprocessed_data(styles, batch_size, time_steps):
 
     train_data, train_labels = load_all(styles, BATCH_SIZE, SEQ_LEN)
 
-    np.save("../data/note_data.npy", train_data[0])
-    np.save("../data/note_target.npy", train_data[1])
-    np.save("../data/beat_data.npy", train_data[2])
-    np.save("../data/style_data.npy", train_data[3])
+    #np.save("../data/note_data.npy", train_data[0])
+    #np.save("../data/note_target.npy", train_data[1])
+    #np.save("../data/beat_data.npy", train_data[2])
+    #np.save("../data/style_data.npy", train_data[3])
+    np.save("../data/train.npy", train_labels[3])
 
     return train_data, train_labels
