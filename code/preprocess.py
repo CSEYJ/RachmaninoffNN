@@ -94,10 +94,10 @@ def get_preprocessed_data(styles, batch_size, time_steps):
 
     train_data, train_labels = load_all(styles, BATCH_SIZE, SEQ_LEN)
 
-    #np.save("../data/note_data.npy", train_data[0])
-    #np.save("../data/note_target.npy", train_data[1])
-    #np.save("../data/beat_data.npy", train_data[2])
-    #np.save("../data/style_data.npy", train_data[3])
+    np.save("../data/note_data.npy", train_data[0])
+    np.save("../data/note_target.npy", train_data[1])
+    np.save("../data/beat_data.npy", train_data[2])
+    np.save("../data/style_data.npy", train_data[3])
     np.save("../data/train.npy", train_labels[3])
 
     return train_data, train_labels
