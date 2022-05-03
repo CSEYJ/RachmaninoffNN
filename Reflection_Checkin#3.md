@@ -1,0 +1,38 @@
+# RachmaninoffNN: Style-Specific Music Generation with Biaxial LSTM
+
+## Team Members
+* Xin Lian (xlian1)
+* Yanyu Tao (ytao5)
+* Yezhi Pan (ypan34)
+* Yongjeong Kim (ykim235)
+
+## Introduction
+
+Deep learning has shown its superiority in solving generative tasks in the domains of natural language processing and computer vision, creating artificial articles and pictures that are realistic and comparable to the works of humans. While deep learning has also been incorporated in the field of audio in recent years for automatic music generation, generating realistic and aesthetic music pieces remains challenging. Most existing neural network music generation algorithms specialize in creating new music in a particular music genre. Still, few algorithms possess a tunable ability that gives users the freedom to choose their desired musical style, including music genre, composer’s style, mood, etc. In the paper by Mao et al. [[1](#references)], the authors aim to create a model capable of composing music given a specific or a mixture of musical styles. They believe that such a model can help customize generated music for people in the music and film industries. They develop upon the previously introduced genre-agnostic algorithm, Biaxial LSTM, and incorporate new methods to learn music dynamics. In our project, we will be implementing the deep learning model presented in the paper, DeepJ, utilizing a different dataset with a mixed-style piano repertoire from the 17th to the early 20th century. 
+
+## Challenges
+
+#### Documentation and compatibility issues:
+We encountered debugging and implementation challenges due to the lack of documentation from the original repository and Pytorch instructions. Some libraries that the original program depends on failed to run correctly and led to system-level failures at the cloud VM instance of Google Cloud Platform (i.e., the instance equipped with the Nvidia Tesla K80 accelerator and Ubuntu 20.04 LTS operating system). We had to select the Pytorch version 1.11 to ensure its compatibility with the Python packages. However, Pytorch constantly fails to detect the accelerator I/O device due to its incompatibility with the virtual machine's pre-installed Linux headers and driver versions. This failure was difficult to diagnose because the official Pytorch setup instructions do not provide sufficient low-level descriptions of the compatibility issues. We investigated this issue and were able to create a bare Ubuntu instance with manual configuration (i.e., CUDA 11.4, Nvidia driver 470.103.01, and other Linux headers/libraries).
+ 
+Furthermore, the DeepJ repository does not sufficiently describe the environment setup and the memory resource requirement for their implementation, crashing the VM instance frequently. Initially, it was challenging to find the root cause of failures because they were not evident from the system metrics by the observability tool. The tool was not a reliable source to monitor the real-time CPU utilization and memory usage in the fine-grained time requirement for the bugs causing the crash. We performed code analysis and identified the failure along the high-level metrics provided by the tool, which indicated the short-lived bursts of heavy resource utilization implied by the code. We modified the parameter values for the CPU multi-threading usages to reduce the run-time memory requirement along with the state-of-art software techniques to reduce the real-time rendering of the data required for the framework. We are debugging this further to configure on-demand memory pulling for the cloud instance.
+ 
+Compatibility is one of the main challenges we faced during the translation process. The original code is based on the TensorFlow framework, whose Keras layers have automated back-end processing for defining and utilizing their layers. However, Pytorch was missing some layer definitions used by Keras, which are frequently used by the original implementations. We had to either find their open-source implementation or manually define our class. Furthermore, Pytorch requires a fine-grained definition of the layer for the declaration; however, the vaguely defined documentation issues above challenged us to find the proper parameters and shape values.
+
+#### Initial environment setup and the cloud reliability:
+At the early implementation stage, we utilized the local environment equipped with the lower-end GPU (Nvidia GeForce series with less than 100 GB memory) and CPU with 1-2 cores. Even with the low efficiency, we were able to utilize CPU resources for the computations and preprocessing; however, later at the stage, we faced issues as we were progressing toward the model verification and training stages due to the lack of the memory in our GPU accelerator, where its storage is not sufficient enough to transfer the host data to the device memory at the run-time. Our local memory architecture with the PCIe bus was not good enough to keep up with the data transfer bandwidth.
+ 
+The cloud support was also not fully reliable (we are not using the auto-scaling feature). We detected the unstable ingress bandwidth for our instance, and the ssh connection constantly gets lost for the large data batch transfer, where the monitoring tool does not provide many insights for the ssh failures and network traffic monitoring due to its naive nature of the virtualization. The instance is also not reliable because it is not fault-tolerant on the data loss of the transfer during the connection loss. We are currently investigating this issue further.
+
+## Insights
+
+Due to the challenges discussed above, we are currently still working on model training and troubleshooting. We are fixing the layer implementation issues caused by the lack of naive support of APIs. At this point, we do not have concrete results generated yet, but we have successfully implemented our preprocessing pipeline to work on the specific data files we are using and are wrapping up our training implementation. Moreover, because of the restriction of specifying extra parameters and shape values in PyTorch when translating layers, we believe our final model will be more stable and scalable comparing to the original model in Tensorflow. We are positive that our translated model will be able to produce comparable performance as that in the original manuscript once everything is fixed. However, we do expect a fair amount of  time in training given the size of the data..
+
+
+## Plan
+
+By now we have found the suitable dataset for our model and finished preprocessing based on the specifications from the original manuscript. We converted the model from Tensorflow to PyTorch framework, and deployed the model to Google Cloud Platform (GCP) for training. We will dedicate more time to address the aforementioned compatibility issues encountered in cloud computation, pinpoint APIs that are more stable than what we are currently using, and fine-tune the hyperparameters eventually. Furthermore, our preprocessed data (piano roll presentation of Musical Instrument Digital Interface files) takes up more than 100 GB of disk memory, but the published paper does not comment on the conventional computational problems such as scarce system memory and/or disk space which can potentially lead to VM failures at the GCP deployment. We plan to explore options to parse the data and find methods to dynamically load the data, in order to scale with the limited resources available.
+
+
+## References
+[1] H. H. Mao, T. Shin and G. Cottrell, "DeepJ: Style-Specific Music Generation," *2018 IEEE 12th International Conference on Semantic Computing (ICSC), 2018*, pp. 377-382, doi: 10.1109/ICSC.2018.00077.  
