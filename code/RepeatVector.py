@@ -17,5 +17,14 @@ class RepeatVector(torch.nn.Module):
       self.n = n
     def forward(self, input):
       input = torch.unsqueeze(input, dim=1)
-      input = input.repeat(1, self.n, 1)
+      if input.dim() == 2:
+        input = input.repeat(1, self.n)
+      elif input.dim() == 3:
+        input = input.repeat(1, self.n, 1)
+      elif input.dim() == 4:
+        input = input.repeat(1, self.n, 1, 1)
+      elif input.dim() == 5:
+        input = input.repeat(1, self.n, 1, 1, 1)
+      elif input.dim() == 6:
+        input = input.repeat(1, self.n, 1, 1, 1, 1)
       return input
