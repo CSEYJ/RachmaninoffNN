@@ -198,7 +198,7 @@ class NoteModel(nn.Module):
 	def __init__(self, time_steps=SEQ_LEN, input_dropout=0.2, dropout=0.5):
 		super().__init__()
 		self.dropout = nn.Dropout(p=input_dropout)
-		self.style_l = nn.Linear(NUM_STYLES, STYLE_UNITS,d evice=torch.device('cuda')).float()
+		self.style_l = nn.Linear(NUM_STYLES, STYLE_UNITS, device=torch.device('cuda')).float()
 		self.naxis = note_axis(dropout)
 
 	def forward(self, note_features, chosen_gen_in, style_gen_in):
