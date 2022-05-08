@@ -198,7 +198,6 @@ def compute_beat(beat, notes_in_bar):
 def build_or_load(allow_load=True):
     from model import build_models
     models = build_models()
-    models[0].summary()
     if allow_load:
         try:
             models[0].load_weights(MODEL_FILE)
