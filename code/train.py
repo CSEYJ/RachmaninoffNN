@@ -27,17 +27,13 @@ SOFTWARE.
 '''
 
 import torch
-#from keras.callbacks import ModelCheckpoint, LambdaCallback
-#from keras.callbacks import EarlyStopping, TensorBoard
 import argparse
 import midi
 import os
 import numpy as np
-
 from constants import *
 from preprocess import *
 from generate import *
-#from midi_util import midi_encode
 from model import *
 from preprocess import *
 
@@ -45,7 +41,6 @@ def main():
     print('torch cuda available: ' + str(torch.cuda.is_available()))
     models = build_or_load()
     train(models)
-    #train()
 
 def train(models):
     print('Loading data ...')
@@ -74,7 +69,6 @@ def train(models):
 
     optimizer = torch.optim.NAdam(models[0].parameters(), lr=0.001)
     loss_function = primary_loss
-    #models = build_or_load()
     for i in range(1000):
         print('epoch #' + str(i + 1) + '/' + str(1000))
         index = 0
@@ -85,17 +79,17 @@ def train(models):
             current_beat_data = torch.tensor(beat_data[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
             current_style_data = torch.tensor(style_data[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
             current_labels = torch.tensor(train_labels[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
-            #print('current labels:')
-            #print(current_labels[:,:,:,1])
             optimizer.zero_grad()
             predicted_labels = models[0](current_note_data, current_note_target, current_beat_data, current_style_data)
             loss = primary_loss(current_labels, predicted_labels)/3
             print('loss: ' + str(loss.item()))
-            #optimizer.zero_grad()
             loss.backward()
-            #torch.nn.utils.clip_grad_norm_(models[0].parameters(), 5)
             optimizer.step()
             index += BATCH_SIZE
+    print('Finished the training ...')
+    print('Saving the weights ...')
+    torch.save(model[0].state_dict(), MODEL_FILE)
+
 
 if __name__ == '__main__':
     main()
