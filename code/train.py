@@ -45,6 +45,7 @@ def main():
     print('torch cuda available: ' + str(torch.cuda.is_available()))
     models = build_or_load()
     train(models)
+    #train()
 
 def train(models):
     print('Loading data ...')
@@ -60,7 +61,7 @@ def train(models):
         note_target = np.load('../data/note_target.npy', 'r')
         beat_data = np.load('../data/beat_data.npy', 'r')
         style_data = np.load('../data/style_data.npy', 'r')
-        train_labels = note_target
+        train_labels = np.load('../data/note_target.npy', 'r')
     else:
         print('Calling the preprocessor ...')
         train_data, train_labels = get_preprocessed_data(styles, BATCH_SIZE, SEQ_LEN)
@@ -71,24 +72,28 @@ def train(models):
 
     print('Training ...')
 
-    optimizer = torch.optim.NAdam(models[0].parameters())
+    optimizer = torch.optim.NAdam(models[0].parameters(), lr=0.001)
     loss_function = primary_loss
-
+    #models = build_or_load()
     for i in range(1000):
         print('epoch #' + str(i + 1) + '/' + str(1000))
         index = 0
         while (index + BATCH_SIZE) < len(train_labels):
-            print('Batch #' + str(i + 1))
-            current_note_data = torch.as_tensor(note_data[index:index + BATCH_SIZE], dtype=torch.float64, device=torch.device('cuda'))
-            current_note_target = torch.as_tensor(note_target[index:index + BATCH_SIZE], dtype=torch.float64, device=torch.device('cuda'))
-            current_beat_data = torch.as_tensor(beat_data[index:index + BATCH_SIZE], dtype=torch.float64, device=torch.device('cuda'))
-            current_style_data = torch.as_tensor(style_data[index:index + BATCH_SIZE], dtype=torch.float64, device=torch.device('cuda'))
-            current_labels = torch.as_tensor(train_labels[index:index + BATCH_SIZE], dtype=torch.float64, device=torch.device('cuda'))
-            predicted_labels = models[0](current_note_data, current_note_target, current_beat_data, current_style_data)
-            loss = loss_function(predicted_labels, current_labels)
-            print('Loss: ' + str(loss))
+            print('Batch #' + str(int(index/BATCH_SIZE + 1)) + '/' + str(int(len(train_labels)/BATCH_SIZE)))
+            current_note_data = torch.tensor(note_data[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
+            current_note_target = torch.tensor(note_target[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
+            current_beat_data = torch.tensor(beat_data[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
+            current_style_data = torch.tensor(style_data[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
+            current_labels = torch.tensor(train_labels[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
+            #print('current labels:')
+            #print(current_labels[:,:,:,1])
             optimizer.zero_grad()
+            predicted_labels = models[0](current_note_data, current_note_target, current_beat_data, current_style_data)
+            loss = primary_loss(current_labels, predicted_labels)/3
+            print('loss: ' + str(loss.item()))
+            #optimizer.zero_grad()
             loss.backward()
+            #torch.nn.utils.clip_grad_norm_(models[0].parameters(), 5)
             optimizer.step()
             index += BATCH_SIZE
 
