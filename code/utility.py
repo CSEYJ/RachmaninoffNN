@@ -200,7 +200,7 @@ def build_or_load(allow_load=True):
     models = build_models()
     if allow_load:
         try:
-            models[0].load_weights(MODEL_FILE)
+            models[0].load_state_dict(torch.load(MODEL_FILE))
             print('Loaded model from file.')
         except:
             print('Unable to load model from file.')
