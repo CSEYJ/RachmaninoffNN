@@ -32,10 +32,10 @@ import midi
 import argparse
 
 from constants import *
-from util import *
-from dataset import *
+from utility import *
+#from dataset import *
 from tqdm import tqdm
-from midi_util import midi_encode
+from utility import midi_encode
 
 class MusicGeneration:
     """
@@ -123,13 +123,13 @@ def process_inputs(ins):
     return ins
 
 def get_predicted_value(model, samples):
-	predicted_values = list()
+    predicted_values = list()
     model.eval()
-	for index in range(samples.size(0)):
-		current_sample = torch.tensor(samples[index], dtype=torch.float32, device=torch.device('cuda'))
-		for value in model[current_sample]:
-			predicted_values.append(value)
-	return predicted_values
+    for index in range(samples.size(0)):
+        current_sample = torch.tensor(samples[index], dtype=torch.float32, device=torch.device('cuda'))
+        for value in model[current_sample]:
+            predicted_values.append(value)
+    return predicted_values
 
 def generate(models, num_bars, styles):
     print('Generating with styles:', styles)
