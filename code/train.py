@@ -65,13 +65,31 @@ def train(models):
         beat_data = train_data[2]
         style_data = train_data[3]
 
+    nepoch = 0
+    index = 0
+    if os.path.exists(EPOCH_FILE):
+        temp = open(EPOCH_FILE, "r").readline()
+        if len(temp) > 0: nepoch = int(temp)
+
+    if os.path.exists(INDEX_FILE):
+        temp = open(INDEX_FILE, "r").readline()
+        if len(temp) > 0: index = int(temp)
+
+    if not os.path.exists('./out'): 
+        os.makedirs('./out')
+
+    
     print('Training ...')
 
     optimizer = torch.optim.NAdam(models[0].parameters(), lr=0.001)
     loss_function = primary_loss
-    for i in range(1000):
+    nepoch = 0
+    for i in range(nepoch, 1000):
+        epoch_file = open(EPOCH_FILE, 'w')
+        epoch_file.write(str(i))
+        epoch_file.close()
+
         print('epoch #' + str(i + 1) + '/' + str(1000))
-        index = 0
         while (index + BATCH_SIZE) < len(train_labels):
             print('Batch #' + str(int(index/BATCH_SIZE + 1)) + '/' + str(int(len(train_labels)/BATCH_SIZE)))
             current_note_data = torch.tensor(note_data[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
@@ -85,10 +103,19 @@ def train(models):
             print('loss: ' + str(loss.item()))
             loss.backward()
             optimizer.step()
+            print('Saving the weights ...')
+            torch.save(models[0].state_dict(), MODEL_FILE)
             index += BATCH_SIZE
+
+            index_file = open(INDEX_FILE, 'w')
+            index_file.write(str(index))
+            index_file.close()
+
+        index = 0
+
     print('Finished the training ...')
     print('Saving the weights ...')
-    torch.save(model[0].state_dict(), MODEL_FILE)
+    torch.save(models[0].state_dict(), MODEL_FILE)
 
 
 if __name__ == '__main__':

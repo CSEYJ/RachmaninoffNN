@@ -92,7 +92,7 @@ NOTES_PER_BEAT = 4
 NOTES_PER_BAR = NOTES_PER_BEAT * BEATS_PER_BAR
 
 # Training parameters
-BATCH_SIZE = 16
+BATCH_SIZE = 50
 SEQ_LEN = 8 * NOTES_PER_BAR
 
 # Hyper Parameters
@@ -109,5 +109,7 @@ NOTE_AXIS_LAYERS = 2
 OUT_DIR = 'out'
 MODEL_DIR = os.path.join(OUT_DIR, 'models')
 MODEL_FILE = os.path.join(OUT_DIR, 'model.h5')
+INDEX_FILE = os.path.join(OUT_DIR, 'model_index.txt')
+EPOCH_FILE = os.path.join(OUT_DIR, 'epoch_index.txt')
 SAMPLES_DIR = os.path.join(OUT_DIR, 'samples')
 CACHE_DIR = os.path.join(OUT_DIR, 'cache')
