@@ -105,6 +105,12 @@ class MusicGeneration:
         self.next_note = np.zeros((NUM_NOTES, NOTE_UNITS))
         return self.results[-1]
 
+def unclamp_midi(sequence):
+    """
+    Restore clamped MIDI sequence back to MIDI note values
+    """
+    return np.pad(sequence, ((0, 0), (MIN_NOTE, 0), (0, 0)), 'constant')
+
 def compute_genre(genre_id):
     """ Computes a vector that represents a particular genre """
     genre_hot = np.zeros((NUM_STYLES,))
