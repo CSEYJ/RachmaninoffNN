@@ -26,6 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 '''
 import midi
+import torch
 import numpy as np
 import os
 import math
@@ -289,6 +290,12 @@ def build_or_load(allow_load=True):
     if allow_load:
         try:
             models[0].load_state_dict(torch.load(MODEL_FILE))
+            models[1].style_l = models[0].style_l
+            models[1].time_axis = models[0].time_axis
+            models[1].dropout1 = models[0].dropout1
+            models[1].dropout2 = models[0].dropout2
+            models[2].style_l = models[0].style_l
+            models[2].naxis = models[0].naxis
             print('Loaded model from file.')
         except:
             print('Unable to load model from file.')

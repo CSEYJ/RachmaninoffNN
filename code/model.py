@@ -180,12 +180,12 @@ class MainModel(nn.Module):
         return notes_out
 
 class TimeModel(nn.Module):
-	def __init__(self, time_steps=SEQ_LEN, input_dropout=0.2, dropout=0.5):
+	def __init__(self, time_axis, style_l, dropout1, dropout2):
 		super().__init__()
-		self.dropout1 = nn.Dropout(p=input_dropout)
-		self.dropout2 = nn.Dropout(p=input_dropout)
-		self.style_l = nn.Linear(NUM_STYLES, STYLE_UNITS, device=torch.device('cuda')).float()
-		self.time_axis = time_axis(dropout)
+		self.dropout1 = dropout1
+		self.dropout2 = dropout2
+		self.style_l = style_l
+		self.time_axis = time_axis
 
 	def forward(self, notes_in, beat_in, style_in):
 		notes = self.dropout1(notes_in)
@@ -195,11 +195,11 @@ class TimeModel(nn.Module):
 		return time_out
 
 class NoteModel(nn.Module):
-	def __init__(self, time_steps=SEQ_LEN, input_dropout=0.2, dropout=0.5):
+	def __init__(self, naxis, style_l, input_dropout=0.2):
 		super().__init__()
 		self.dropout = nn.Dropout(p=input_dropout)
-		self.style_l = nn.Linear(NUM_STYLES, STYLE_UNITS, device=torch.device('cuda')).float()
-		self.naxis = note_axis(dropout)
+		self.style_l = style_l
+		self.naxis = naxis
 
 	def forward(self, note_features, chosen_gen_in, style_gen_in):
 		chosen_gen = self.dropout(chosen_gen_in)
@@ -209,8 +209,8 @@ class NoteModel(nn.Module):
 
 def build_models(time_steps=SEQ_LEN, input_dropout=0.2, dropout=0.5):
     model = MainModel().to(torch.device('cuda'))
-    time_model = TimeModel().to(torch.device('cuda'))
-    note_model = NoteModel().to(torch.device('cuda'))
+    time_model = TimeModel(time_axis=model.time_axis, style_l=model.style_l, dropout1=model.dropout1, dropout2=model.dropout2).to(torch.device('cuda'))
+    note_model = NoteModel(naxis=model.naxis, style_l=model.style_l).to(torch.device('cuda'))
     #model = MainModel()
     #time_model = TimeModel()
     #note_model = NoteModel()
