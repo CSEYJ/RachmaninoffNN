@@ -1,5 +1,5 @@
 '''
-Reimplementation of generate.py (https://github.com/calclavia/DeepJ/blob/icsc/generate.py) with PyTorch.
+Reimplementation of generate.py and dataset.py (https://github.com/calclavia/DeepJ/blob/icsc/generate.py) with PyTorch.
 
 Credit to the original implementation:
 
@@ -105,6 +105,17 @@ class MusicGeneration:
         self.next_note = np.zeros((NUM_NOTES, NOTE_UNITS))
         return self.results[-1]
 
+def compute_genre(genre_id):
+    """ Computes a vector that represents a particular genre """
+    genre_hot = np.zeros((NUM_STYLES,))
+    start_index = sum(len(s) for i, s in enumerate(styles) if i < genre_id)
+    styles_in_genre = len(styles[genre_id])
+    genre_hot[start_index:start_index + styles_in_genre] = 1 / styles_in_genre
+    return genre_hot
+
+def compute_beat(beat, notes_in_bar):
+    return one_hot(beat % notes_in_bar, notes_in_bar)
+
 def apply_temperature(prob, temperature):
     """
     Applies temperature to a sigmoid vector.
@@ -125,11 +136,10 @@ def process_inputs(ins):
 def get_predicted_value(model, samples):
     predicted_values = list()
     model.eval()
-    for index in range(samples.size(0)):
-        current_sample = torch.tensor(samples[index], dtype=torch.float32, device=torch.device('cuda'))
-        for value in model[current_sample]:
-            predicted_values.append(value)
-    return predicted_values
+    input1 = torch.tensor(samples[0], dtype=torch.float32, device=torch.device('cuda'))
+    input2 = torch.tensor(samples[1], dtype=torch.float32, device=torch.device('cuda'))
+    input3 = torch.tensor(samples[2], dtype=torch.float32, device=torch.device('cuda'))
+    return model(input1, input2, input3).cpu().detach()
 
 def generate(models, num_bars, styles):
     print('Generating with styles:', styles)
@@ -139,15 +149,16 @@ def generate(models, num_bars, styles):
 
     for t in tqdm(range(NOTES_PER_BAR * num_bars)):
         # Produce note-invariant features
-        ins = process_inputs([g.build_time_inputs() for g in generations])
+        inputs = process_inputs([g.build_time_inputs() for g in generations])
         # Pick only the last time step
-        note_features = get_predicted_value(time_model, ins)
-        note_features = np.array(note_features)[:, -1:, :]
+        note_features = get_predicted_value(time_model, inputs)
+        note_features = note_features.numpy()[:, -1:, :]
 
         # Generate each note conditioned on previous
         for n in range(NUM_NOTES):
-            ins = process_inputs([g.build_note_inputs(note_features[i, :, :, :]) for i, g in enumerate(generations)])
-            predictions = np.array(note_model.predict(ins))
+            inputs = process_inputs([g.build_note_inputs(note_features[i, :, :, :]) for i, g in enumerate(generations)])
+            predictions = get_predicted_value(note_model, inputs)
+            predictions = get_predicted_value(note_model, inputs).numpy()
 
             for i, g in enumerate(generations):
                 # Remove the temporal dimension
