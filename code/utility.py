@@ -184,17 +184,17 @@ def midi_encode(note_seq, resolution=NOTES_PER_BEAT, step=1):
                 if next_volume > 0 and current[index] == 0:
                     # Was off, but now turned on
                     evt = midi.NoteOnEvent(
-                        tick=(tick - last_event_tick) * step,
-                        velocity=int(volume[tick][index[0]] * MAX_VELOCITY),
-                        pitch=index[0]
+                        tick=abs((tick - last_event_tick) * step),
+                        velocity=abs(int(volume[tick][index[0]] * MAX_VELOCITY)),
+                        pitch=abs(index[0])
                     )
                     track.append(evt)
                     last_event_tick = tick
                 elif current[index] > 0 and next_volume == 0:
                     # Was on, but now turned off
                     evt = midi.NoteOffEvent(
-                        tick=(tick - last_event_tick) * step,
-                        pitch=index[0]
+                        tick=(abs(tick - last_event_tick) * step),
+                        pitch=abs(index[0])
                     )
                     track.append(evt)
                     last_event_tick = tick
@@ -202,14 +202,14 @@ def midi_encode(note_seq, resolution=NOTES_PER_BEAT, step=1):
                 elif current[index] > 0 and next_volume > 0 and replay[tick][index[0]] > 0:
                     # Handle replay
                     evt_off = midi.NoteOffEvent(
-                        tick=(tick- last_event_tick) * step,
-                        pitch=index[0]
+                        tick=abs((tick- last_event_tick) * step),
+                        pitch=abs(index[0])
                     )
                     track.append(evt_off)
                     evt_on = midi.NoteOnEvent(
                         tick=0,
-                        velocity=int(volume[tick][index[0]] * MAX_VELOCITY),
-                        pitch=index[0]
+                        velocity=abs(int(volume[tick][index[0]] * MAX_VELOCITY)),
+                        pitch=abs(index[0])
                     )
                     track.append(evt_on)
                     last_event_tick = tick
