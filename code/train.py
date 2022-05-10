@@ -81,7 +81,7 @@ def train(models):
     
     print('Training ...')
 
-    optimizer = torch.optim.NAdam(models[0].parameters(), lr=0.001)
+    optimizer = torch.optim.NAdam(models[0].parameters(), lr=0.01)
     loss_function = primary_loss
     nepoch = 0
     for i in range(nepoch, 1000):
@@ -99,12 +99,15 @@ def train(models):
             current_labels = torch.tensor(train_labels[index:index + BATCH_SIZE], dtype=torch.float32, device=torch.device('cuda'))
             optimizer.zero_grad()
             predicted_labels = models[0](current_note_data, current_note_target, current_beat_data, current_style_data)
-            loss = primary_loss(current_labels, predicted_labels)/3
-            print('loss: ' + str(loss.item()))
-            loss.backward()
-            optimizer.step()
-            print('Saving the weights ...')
-            torch.save(models[0].state_dict(), MODEL_FILE)
+            try:
+                loss = primary_loss(current_labels, predicted_labels)
+                print('loss: ' + str(loss.item()))
+                loss.backward()
+                optimizer.step()
+                print('Saving the weights ...')
+                torch.save(models[0].state_dict(), MODEL_FILE)
+            except:
+                print('There was an issue at updating the value.')
             index += BATCH_SIZE
 
             index_file = open(INDEX_FILE, 'w')
