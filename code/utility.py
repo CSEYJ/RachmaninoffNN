@@ -290,13 +290,22 @@ def build_or_load(allow_load=True):
     if allow_load:
         try:
             models[0].load_state_dict(torch.load(MODEL_FILE))
-            models[1].style_l = models[0].style_l
-            models[1].time_axis = models[0].time_axis
-            models[1].dropout1 = models[0].dropout1
-            models[1].dropout2 = models[0].dropout2
-            models[2].style_l = models[0].style_l
-            models[2].naxis = models[0].naxis
-            print('Loaded model from file.')
+
+            with torch.no_grad():
+                models[1].style_l.weight.copy_(models[0].style_l.weight)
+                models[1].conv1d.weight.copy_(models[0].conv1d.weight)
+                models[1].dense1.weight.copy_(models[0].dense1.weight)
+                models[1].dense2.weight.copy_(models[0].dense2.weight)
+                models[1].lstm1.load_state_dict(models[0].lstm1.state_dict())
+                models[1].lstm2.load_state_dict(models[0].lstm2.state_dict())
+
+                models[2].style_l.weight.copy_(models[0].style_l.weight)
+                models[2].dense3.weight.copy_(models[0].dense3.weight)
+                models[2].dense4.weight.copy_(models[0].dense4.weight)
+                models[2].lstm3.load_state_dict(models[0].lstm3.state_dict())
+                models[2].lstm4.load_state_dict(models[0].lstm4.state_dict())
+                models[2].dense5.weight.copy_(models[0].dense5.weight)
+                models[2].dense6.weight.copy_(models[0].dense6.weight)
         except:
             print('Unable to load model from file.')
     return models
