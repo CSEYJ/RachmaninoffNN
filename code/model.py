@@ -213,10 +213,13 @@ class MainModel(nn.Module):
 
 
 class TimeModel(nn.Module):
-    def __init__(self, input_dropout=0.2):
+    def __init__(self, input_dropout=0.2, dropout=0.5):
         super().__init__()
         self.dropout1 = nn.Dropout(p=input_dropout)
         self.dropout2 = nn.Dropout(p=input_dropout)
+        self.dropout4 = nn.Dropout(p=dropout)
+        self.dropout5 = nn.Dropout(p=dropout)
+        self.dropout6 = nn.Dropout(p=dropout)
 
         self.style_l = nn.Linear(NUM_STYLES, STYLE_UNITS, device=torch.device('cuda')).float()
 
@@ -255,7 +258,7 @@ class TimeModel(nn.Module):
         pitch_class = pitch_class_in_f(time_steps)(notes)
         pitch_bins = pitch_bins_f(time_steps)(notes)
 
-        beat_repeat = self.time_distributed2(beat)
+        beat_repeat = self.time_distributed2(beats)
         note_octave = note_octave.view(pitch_pos.size()[0], pitch_pos.size()[1], pitch_pos.size()[2], -1)
         beat_repeat = beat_repeat.view(pitch_pos.size()[0], pitch_pos.size()[1], pitch_pos.size()[2], -1)
 
@@ -290,9 +293,12 @@ class TimeModel(nn.Module):
         return time_out
 
 class NoteModel(nn.Module):
-    def __init__(self, input_dropout=0.2):
+    def __init__(self, input_dropout=0.2, dropout=0.5):
         super().__init__()
         self.dropout = nn.Dropout(p=input_dropout)
+        self.dropout7 = nn.Dropout(p=dropout)
+        self.dropout8 = nn.Dropout(p=dropout)
+        
         self.style_l = nn.Linear(NUM_STYLES, STYLE_UNITS, device=torch.device('cuda')).float()
 
         self.dense3 = nn.Linear(STYLE_UNITS, 259, device=torch.device("cuda")).float()
@@ -313,7 +319,6 @@ class NoteModel(nn.Module):
     def forward(self, note_features, chosen_gen_in, style_gen_in):
         chosen = self.dropout(chosen_gen_in)
         style = self.style_l(style_gen_in)
-        note_gen_out = self.naxis(note_features, chosen_gen, style_gen)
 
         time_steps = int(note_features.size(1))
         # Shift target one note to the left.
