@@ -43,16 +43,12 @@ styles = [
 		'../data/baroque/pachelbel'
 	],
 	[
-		'../data/classical/burgmueller',
 		'../data/classical/clementi',
 		'../data/classical/haydn',
 		'../data/classical/beethoven',
-		'../data/classical/brahms',
 		'../data/classical/mozart'
 	],
 	[
-		'../data/romantic/balakirew',
-		'../data/romantic/borodin',
 		'../data/romantic/brahms',
 		'../data/romantic/chopin',
 		'../data/romantic/debussy',
@@ -60,11 +56,9 @@ styles = [
 		'../data/romantic/mendelssohn',
 		'../data/romantic/moszkowski',
 		'../data/romantic/mussorgsky',
-		'../data/romantic/rachmaninov',
 		'../data/romantic/schubert',
 		'../data/romantic/schumann',
 		'../data/romantic/tchaikovsky',
-		'../data/romantic/tschai'
 	]
 ]
 
