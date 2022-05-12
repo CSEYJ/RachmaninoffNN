@@ -81,7 +81,7 @@ def train(models):
     
     print('Training ...')
 
-    optimizer = torch.optim.NAdam(models[0].parameters(), lr=0.01)
+    optimizer = torch.optim.NAdam(models[0].parameters(), lr=0.001)
     loss_function = primary_loss
     nepoch = 0
     for i in range(nepoch, 1000):
@@ -100,7 +100,7 @@ def train(models):
             optimizer.zero_grad()
             predicted_labels = models[0](current_note_data, current_note_target, current_beat_data, current_style_data)
             try:
-                loss = primary_loss(current_labels, predicted_labels)
+                loss = primary_loss(current_labels, predicted_labels) / 3
                 print('loss: ' + str(loss.item()))
                 loss.backward()
                 optimizer.step()
