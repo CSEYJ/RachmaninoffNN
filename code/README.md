@@ -14,7 +14,7 @@ This will generate the required dataset to `../data` directory.
 ### Environment Setup
 Install the dependencies:  
 ```
-sudo sh ./setup.sh
+sh ./setup.sh
 ```
 
 ## Usage
