@@ -10,5 +10,5 @@ Reimplementing the paper ([DeepJ](https://github.com/calclavia/DeepJ)) with PyTo
 * Yezhi Pan
 * Yongjeong Kim
 
-## Requirements
-- Please install the dependency: `sh ./setup.sh`
+## Setup
+Please follow the instruction at ./code directory.
