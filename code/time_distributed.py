@@ -1,6 +1,6 @@
 '''
 PyTorch does not have the implementation of TimeDistributed layer.
-The following is the implementation provided from the Pytorch Github issues by the user erogol (ticket number #1927).
+The following is the modification of the codes provided from the Pytorch Github issues by the user erogol (ticket number #1927).
 
 Source: https://github.com/pytorch/pytorch/issues/1927
 '''
